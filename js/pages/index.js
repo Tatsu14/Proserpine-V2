@@ -1,5 +1,4 @@
 import { initAuth } from '../auth.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-    initAuth();
-});
+// Appel immédiat car le script est déjà différé (type="module")
+initAuth();

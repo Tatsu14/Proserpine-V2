@@ -17,36 +17,47 @@ import { showToast, showLoader, hideLoader, hideSplashScreen } from './ui.js';
 let currentUser = null;
 let authInitialized = false;
 
-// Pages publiques (non protégées)
-const publicPages = ['connexion.html', 'inscription.html', 'index.html', ''];
+// Pages d'authentification (publiques)
+const authPages = ['connexion.html', 'inscription.html'];
 
 /**
  * Initialisation et protection des routes
- * Doit être appelé sur TOUTES les pages
  */
 export function initAuth() {
+    // Sécurité: masquer le splash screen après un délai si Firebase ne répond pas
+    setTimeout(() => hideSplashScreen(), 3000);
+
     return new Promise((resolve) => {
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
             authInitialized = true;
             hideSplashScreen();
             
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-            const isPublicPage = publicPages.includes(currentPage);
+            const pathname = window.location.pathname;
+            const rawFilename = pathname.split('/').pop();
+            // Nettoyer le nom du fichier (enlever ?query= et #hash)
+            const filename = rawFilename ? rawFilename.split('?')[0].split('#')[0] : '';
+            const currentPage = filename === '' || !filename ? 'index.html' : filename;
             
-            // Si l'utilisateur n'est pas connecté et essaie d'accéder à une page protégée
-            if (!user && !isPublicPage) {
-                // Redirection vers la page de connexion
-                const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
-                const prefix = isRoot ? 'pages/' : '';
-                window.location.replace(`${prefix}connexion.html`);
-            } 
-            // Si l'utilisateur est connecté et est sur une page d'auth
-            else if (user && (currentPage === 'connexion.html' || currentPage === 'inscription.html' || currentPage === 'index.html' || currentPage === '')) {
-                // Redirection vers l'accueil
-                const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
-                const prefix = isRoot ? 'pages/' : '';
-                window.location.replace(`${prefix}accueil.html`);
+            const isAuthPage = authPages.includes(currentPage);
+            const isIndex = currentPage === 'index.html';
+            
+            // Logique de redirection
+            if (!user) {
+                // Si déconnecté et pas sur une page d'auth
+                if (!isAuthPage) {
+                    const prefix = isIndex ? 'pages/' : '';
+                    // Éviter de rediriger si on est déjà sur connexion.html (sécurité supplémentaire)
+                    if (currentPage !== 'connexion.html') {
+                        window.location.replace(`${prefix}connexion.html`);
+                    }
+                }
+            } else {
+                // Si connecté et sur une page d'auth ou l'index
+                if (isAuthPage || isIndex) {
+                    const prefix = isIndex ? 'pages/' : '';
+                    window.location.replace(`${prefix}accueil.html`);
+                }
             }
             
             resolve(user);
