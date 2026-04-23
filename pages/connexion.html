@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Connexion - Proserpine</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0" />
+</head>
+<body>
+    <div id="app-container">
+        <!-- Splash Screen géré par auth.js -->
+        <div id="splash-screen" class="splash-screen">
+            <div class="splash-logo-container"><span class="material-symbols-rounded splash-logo-icon">eco</span></div>
+            <div class="splash-spinner"></div>
+        </div>
+        
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-logo">
+                    <span class="material-symbols-rounded">eco</span>
+                </div>
+                <h1 class="auth-title">Bon retour</h1>
+                <p class="auth-subtitle">Connectez-vous pour continuer</p>
+                
+                <form id="login-form">
+                    <div id="auth-error" class="auth-error"></div>
+                    
+                    <div class="input-group">
+                        <label class="input-label" for="email">Adresse e-mail</label>
+                        <input type="email" id="email" class="input-field" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label" for="password">Mot de passe</label>
+                        <input type="password" id="password" class="input-field" required>
+                    </div>
+                    
+                    <div class="forgot-pwd">
+                        <a href="#" id="forgot-btn">Mot de passe oublié ?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" id="submit-btn" disabled>Se connecter</button>
+                </form>
+                
+                <div class="auth-links">
+                    Pas encore de compte ? <a href="inscription.html">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/pages/connexion.js"></script>
+</body>
+</html>

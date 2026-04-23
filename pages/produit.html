@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Produit - Proserpine</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0" />
+</head>
+<body>
+    <div id="app-container">
+        
+        <div class="hero-product">
+            <button class="btn-back-product" id="btn-back">
+                <span class="material-symbols-rounded">arrow_back</span>
+            </button>
+            
+            <div class="gauge-container">
+                <svg class="score-svg" viewBox="0 0 100 100">
+                    <circle class="score-bg" cx="50" cy="50" r="45" />
+                    <circle class="score-progress" id="score-ring" cx="50" cy="50" r="45" />
+                </svg>
+                <div class="score-value" id="score-val">0</div>
+                <div class="score-max">/100</div>
+            </div>
+        </div>
+        
+        <div class="product-content">
+            <h1 class="product-name" id="prod-name">Chargement...</h1>
+            <div class="product-brand" id="prod-brand">...</div>
+            <div class="product-label" id="prod-label"></div>
+            
+            <div class="analysis-box">
+                <div class="analysis-title">Analyse Proserpine</div>
+                <div class="analysis-text" id="prod-analysis">Analyse en cours...</div>
+            </div>
+            
+            <h3 class="section-subtitle">Consignes de tri</h3>
+            <div class="sorting-grid">
+                <a href="guide-detail.html?type=pmc" class="sorting-card">
+                    <div class="sorting-icon-wrapper bg-guide-pmc">
+                        <span class="material-symbols-rounded">recycling</span>
+                    </div>
+                    <div class="sorting-card-title">Sac Bleu (PMC)</div>
+                    <div class="sorting-card-sub">Emballages</div>
+                </a>
+                <a href="guide-detail.html?type=residual" class="sorting-card">
+                    <div class="sorting-icon-wrapper bg-guide-residual">
+                        <span class="material-symbols-rounded">delete</span>
+                    </div>
+                    <div class="sorting-card-title">Résiduel</div>
+                    <div class="sorting-card-sub">Reste du produit</div>
+                </a>
+            </div>
+            
+            <div class="meta-info">
+                <div class="meta-row">
+                    <span class="meta-label">Code EAN</span>
+                    <span class="meta-value" id="prod-ean">-</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">Pays d'origine</span>
+                    <span class="meta-value" id="prod-origin">-</span>
+                </div>
+            </div>
+            
+            <div class="source-info">Source : <span id="prod-source">Open Food Facts</span></div>
+        </div>
+        
+    </div>
+
+    <script type="module" src="../js/pages/produit.js"></script>
+</body>
+</html>

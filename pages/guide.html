@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Guide de tri - Proserpine</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0" />
+</head>
+<body>
+    <div id="app-container" class="content-with-nav">
+        
+        <header class="guide-header">
+            <h1 class="guide-title">Guide de tri</h1>
+            <p class="guide-subtitle">Province de Liège</p>
+        </header>
+        
+        <main class="guide-grid" id="guide-grid">
+            <a href="guide-detail.html?type=pmc" class="guide-card card-pmc">
+                <span class="material-symbols-rounded guide-card-icon">recycling</span>
+                <div class="guide-card-title">Sac bleu<br>(PMC)</div>
+                <div class="guide-card-desc">Plastiques, métaux, cartons à boisson</div>
+            </a>
+            
+            <a href="guide-detail.html?type=paper" class="guide-card card-paper">
+                <span class="material-symbols-rounded guide-card-icon">description</span>
+                <div class="guide-card-title">Papiers &<br>cartons</div>
+                <div class="guide-card-desc">Papiers, cartons propres</div>
+            </a>
+            
+            <a href="guide-detail.html?type=organic" class="guide-card card-organic">
+                <span class="material-symbols-rounded guide-card-icon">compost</span>
+                <div class="guide-card-title">Déchets<br>organiques</div>
+                <div class="guide-card-desc">Déchets alimentaires, végétaux</div>
+            </a>
+            
+            <a href="guide-detail.html?type=glass" class="guide-card card-glass">
+                <span class="material-symbols-rounded guide-card-icon">liquor</span>
+                <div class="guide-card-title">Verre</div>
+                <div class="guide-card-desc">Bouteilles, bocaux en verre transparent</div>
+            </a>
+            
+            <a href="guide-detail.html?type=residual" class="guide-card card-residual">
+                <span class="material-symbols-rounded guide-card-icon">delete</span>
+                <div class="guide-card-title">Déchets<br>résiduels</div>
+                <div class="guide-card-desc">Déchets non recyclables</div>
+            </a>
+            
+            <a href="guide-detail.html?type=danger" class="guide-card card-danger">
+                <span class="material-symbols-rounded guide-card-icon">warning</span>
+                <div class="guide-card-title">Recyparc</div>
+                <div class="guide-card-desc">Piles, produits chimiques, DEEE</div>
+            </a>
+        </main>
+        
+    </div>
+
+    <script type="module" src="../js/pages/guide.js"></script>
+</body>
+</html>

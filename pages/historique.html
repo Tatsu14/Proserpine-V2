@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Historique - Proserpine</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0" />
+</head>
+<body>
+    <div id="app-container">
+        <header class="history-header">
+            <button class="btn-back-history" id="btn-back">
+                <span class="material-symbols-rounded">arrow_back</span>
+            </button>
+            <h1 class="header-title">Historique complet</h1>
+        </header>
+        
+        <main class="history-list-container">
+            <div id="history-list">
+                <!-- Skeletons initiaux -->
+                <div class="history-item skeleton h-66 border-none"></div>
+                <div class="history-item skeleton h-66 border-none"></div>
+                <div class="history-item skeleton h-66 border-none"></div>
+                <div class="history-item skeleton h-66 border-none"></div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="../js/pages/historique.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Profil - Proserpine</title>
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0..1,0" />
+</head>
+<body>
+    <div id="app-container" class="content-with-nav">
+        
+        <header class="profile-header">
+            <h1 class="username-title" id="user-display-name">Chargement...</h1>
+        </header>
+        
+        <main>
+            <h2 class="profile-section-title">Mon activité</h2>
+            <div class="profile-menu">
+                <a href="historique.html" class="menu-item">
+                    <div class="menu-item-left">
+                        <span class="material-symbols-rounded menu-icon">history</span>
+                        Historique de recherches
+                    </div>
+                    <span class="material-symbols-rounded text-light">chevron_right</span>
+                </a>
+            </div>
+            
+            <h2 class="profile-section-title">Mon compte</h2>
+            <div class="profile-menu">
+                <button class="menu-item" id="btn-edit-profile">
+                    <div class="menu-item-left">
+                        <span class="material-symbols-rounded menu-icon">edit_document</span>
+                        Modifier mes informations
+                    </div>
+                    <span class="material-symbols-rounded text-light">chevron_right</span>
+                </button>
+            </div>
+            
+            <button class="btn-logout" id="btn-logout">
+                <span class="material-symbols-rounded">logout</span>
+                Se déconnecter
+            </button>
+        </main>
+    </div>
+
+    <script type="module" src="../js/pages/profil.js"></script>
+</body>
+</html>

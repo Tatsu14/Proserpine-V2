@@ -1,0 +1,127 @@
+:root {
+    /* Le nombre d'or (φ ≈ 1.618) */
+    --phi: 1.618;
+
+    /* COULEURS — MARQUE */
+    --color-brand-darkest:          #071E12;
+    --color-brand-primary:          #00CC66;
+    --color-brand-primary-dark:     #00994C;
+    --color-brand-primary-light:    rgba(0, 204, 102, 0.10);
+    --color-brand-primary-glow:     rgba(0, 204, 102, 0.40);
+
+    /* COULEURS — ARRIÈRE-PLANS */
+    --color-bg-app:                 #E2E8F0;
+    --color-bg-gray:                #F3F5F4;
+    --color-bg-surface:             #FFFFFF;
+    --color-bg-dot-pattern:         #C2D4C9;
+
+    /* COULEURS — TEXTES */
+    --color-text-dark:              #0F1713;
+    --color-text-muted:             #596B62;
+    --color-text-light:             #A4B5AC;
+    --color-text-on-dark:           #FFFFFF;
+    --color-text-on-dark-muted:     rgba(255, 255, 255, 0.60);
+    --color-text-on-dark-faint:     rgba(255, 255, 255, 0.80);
+
+    /* COULEURS — BORDURES */
+    --color-border-default:         #E4EBE6;
+    --color-border-brand:           #00CC66;
+    --color-border-on-dark:         rgba(255, 255, 255, 0.15);
+    --color-border-on-dark-strong:  rgba(255, 255, 255, 0.10);
+    --color-border-mobile-frame:    #DFE6E1;
+
+    /* COULEURS — STATUTS SÉMANTIQUES */
+    --color-status-good:            #27AE60;
+    --color-status-warning:         #FF9800;
+    --color-status-danger:          #E74C3C;
+    --color-status-good-bg:         rgba(0, 204, 102, 0.10);
+    --color-status-warning-bg:      rgba(255, 152, 0, 0.10);
+
+    /* COULEURS — CATÉGORIES GUIDE TRI */
+    --color-guide-pmc:              #3498DB;
+    --color-guide-paper:            #F1C40F;
+    --color-guide-paper-text:       #2C3E50;
+    --color-guide-organic:          #27AE60;
+    --color-guide-glass:            #95A5A6;
+    --color-guide-residual:         #4a4a4a;
+    --color-guide-danger:           #E74C3C;
+
+    /* COULEURS — OVERLAYS */
+    --color-overlay-dark-heavy:     rgba(0, 0, 0, 0.80);
+    --color-overlay-dark-medium:    rgba(0, 0, 0, 0.50);
+    --color-overlay-white-faint:    rgba(255, 255, 255, 0.08);
+    --color-overlay-white-subtle:   rgba(255, 255, 255, 0.10);
+    --color-overlay-white-card:     rgba(255, 255, 255, 0.05);
+    --color-gradient-card-shine:    linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+
+    /* TYPOGRAPHIE — ÉCHELLE */
+    --font-size-2xs:    0.625rem;    /* 10px */
+    --font-size-xs:     0.6875rem;   /* 11px */
+    --font-size-sm:     0.75rem;     /* 12px */
+    --font-size-base:   0.8125rem;   /* 13px */
+    --font-size-md:     0.875rem;    /* 14px */
+    --font-size-lg:     1rem;        /* 16px */
+    --font-size-xl:     1.125rem;    /* 18px */
+    --font-size-2xl:    1.25rem;     /* 20px */
+    --font-size-3xl:    1.5rem;      /* 24px */
+    --font-size-4xl:    1.625rem;    /* 26px */
+    --font-size-5xl:    2.618rem;    /* 41.9px */
+
+    /* ESPACEMENTS — SYSTÈME NOMBRE D'OR */
+    --phi-space-xs:     0.382rem;    /*  6.1px */
+    --phi-space-sm:     0.618rem;    /*  9.9px */
+    --phi-space-md:     1rem;        /* 16.0px */
+    --phi-space-lg:     1.618rem;    /* 25.9px */
+    --phi-space-xl:     2.618rem;    /* 41.9px */
+    --phi-space-2xl:    4.236rem;    /* 67.8px */
+
+    --space-1:  0.25rem;   --space-2:  0.5rem;
+    --space-3:  0.75rem;   --space-4:  1rem;
+    --space-5:  1.25rem;   --space-6:  1.5rem;
+    --space-8:  2rem;      --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-content-bottom: 5.625rem;
+
+    /* RAYONS DE BORDURE */
+    --radius-xs:    0.375rem;
+    --radius-sm:    0.5rem;
+    --radius-md:    0.75rem;
+    --radius-lg:    1rem;
+    --radius-xl:    1.25rem;
+    --radius-2xl:   1.5rem;
+    --radius-3xl:   2rem;
+    --radius-phi:   1.618rem;
+    --radius-full:  50%;
+
+    /* TRANSITIONS & ANIMATIONS */
+    --transition-fast:      0.2s ease;
+    --transition-normal:    0.3s ease;
+    --transition-smooth:    0.3s cubic-bezier(0.1, 0.7, 0.1, 1);
+    --transition-gauge:     1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-scan-duration:   4s;
+    --animation-pulse-duration:  2s;
+
+    /* DIMENSIONS DES COMPOSANTS */
+    --size-icon-btn:        2.5rem;
+    --size-icon-item:       3rem;
+    --size-scan-circle:     3.5rem;
+    --size-gauge:           10rem;
+    --size-nav-height:      5rem;
+    --size-mobile-width:    24.375rem;
+    --size-mobile-height:   52.75rem;
+
+    /* OMBRES */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    --shadow-search: 0 8px 16px rgba(0, 204, 102, 0.15);
+}
+
+@media (max-width: 360px) {
+    :root {
+        --font-size-base: 0.75rem;
+        --phi-space-md: 0.875rem;
+        --phi-space-lg: 1.415rem;
+        --size-nav-height: 4.5rem;
+    }
+}
