@@ -1,6 +1,7 @@
 import { initAuth } from '../auth.js';
 import { rechercherProduitParEAN } from '../api.js';
 import { calculerEcoScore } from '../ecoscore.js';
+import { analyserEmballage, CATEGORIES } from '../tri.js';
 import { db } from '../firebase.js';
 import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
 
@@ -10,6 +11,37 @@ initAuth().then(user => {
     currentUser = user;
     loadProductData();
 });
+
+function afficherTri(result) {
+    const grid = document.getElementById('sorting-grid');
+    const instructions = document.getElementById('sorting-instructions');
+
+    if (result.composants.length === 0) {
+        grid.innerHTML = `
+            <div class="sorting-no-data">
+                <span class="material-symbols-rounded">help_outline</span>
+                <p>Pas assez de données disponibles pour connaître la façon de tri exact.</p>
+            </div>`;
+        return;
+    }
+
+    if (result.instructions) {
+        instructions.textContent = result.instructions;
+        instructions.classList.remove('d-none');
+    }
+
+    grid.innerHTML = result.composants.map(c => {
+        const cat = CATEGORIES[c.categorie];
+        return `
+            <a href="guide-detail.html?type=${cat.guideType}" class="sorting-card">
+                <div class="sorting-icon-wrapper ${cat.cssClass}" style="color: ${cat.iconColor}">
+                    <span class="material-symbols-rounded">${cat.icon}</span>
+                </div>
+                <div class="sorting-card-title">${cat.title}</div>
+                <div class="sorting-card-sub">${c.description}</div>
+            </a>`;
+    }).join('');
+}
 
 document.getElementById('btn-back').addEventListener('click', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -91,6 +123,9 @@ async function loadProductData() {
     document.querySelector('.analysis-box').style.borderLeftColor = resultScore.color;
     document.querySelector('.analysis-title').style.color = resultScore.color;
     
+    // Consignes de tri dynamiques
+    afficherTri(analyserEmballage(produit.donnees_brutes));
+
     // Sauvegarder dans l'historique
     if (currentUser) {
         try {
