@@ -95,13 +95,20 @@ export type FicheEmballages = { ean: string; nom: string | null; marque: string 
 /** Limites de la base pour l'administration. */
 export const MAX_EMBALLAGES = 20;
 
+/** Première lettre en majuscule (« sachet plastique » → « Sachet plastique »), le reste inchangé. */
+export const majuscule = (texte: string) => {
+  const t = texte.trim();
+  return t.charAt(0).toLocaleUpperCase('fr') + t.slice(1);
+};
+const propres = (liste: Emballage[]) => liste.map((e) => ({ ...e, nom: majuscule(e.nom) }));
+
 export const emballagesComplets = (liste: Emballage[]) => liste.every((e) => e.nom.trim().length > 0);
 
 export const listerPropositions = (statut: StatutProposition): Promise<ReponseApi<ListePropositions>> =>
   appelerApi<ListePropositions>('admin_lister_propositions', { statut });
 
 export const accepterProposition = (id: number, c: { nom: string; marque: string; emballages: Emballage[] | null }) =>
-  appelerApi('admin_decider', { id, decision: 'accepter', ...c });
+  appelerApi('admin_decider', { id, decision: 'accepter', ...c, emballages: c.emballages ? propres(c.emballages) : null });
 
 export const refuserProposition = (id: number, motif: string) => appelerApi('admin_decider', { id, decision: 'refuser', motif });
 
@@ -115,6 +122,6 @@ export const modifierProduit = (p: { ean: string; nom: string; marque: string; q
 export const lireEmballages = (ean: string) => appelerApi<FicheEmballages>('admin_lire_emballages', { ean });
 
 export const remplacerEmballages = (ean: string, emballages: Emballage[]) =>
-  appelerApi<{ nb_emballages: number }>('admin_remplacer_emballages', { ean, emballages });
+  appelerApi<{ nb_emballages: number }>('admin_remplacer_emballages', { ean, emballages: propres(emballages) });
 
 export const dateCourte = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString('fr-BE') : '—');
