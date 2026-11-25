@@ -157,6 +157,11 @@ export function Signalements({ onCompteur, onOuvrirProduit }: { onCompteur: (n: 
                     <td>
                       <div className="nom">{s.nom_produit ?? 'Produit sans nom'}</div>
                       <div className="mono">{s.ean}</div>
+                      {s.code_postal ? (
+                        <div className="meta">
+                          <Icone nom="place" taille={14} /> {s.code_postal}
+                        </div>
+                      ) : null}
                       <div className="meta">{s.compte ? `compte ${s.compte}…` : 'compte effacé'}</div>
                     </td>
                     <td className="court">

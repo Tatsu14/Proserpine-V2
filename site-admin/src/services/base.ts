@@ -141,6 +141,7 @@ export type Signalement = {
   champs: string[];
   correction: string | null;
   commentaire: string | null;
+  code_postal: string | null;
   statut: StatutSignalement;
   cree_le: string;
   traite_le: string | null;
