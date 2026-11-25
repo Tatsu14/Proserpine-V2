@@ -125,3 +125,56 @@ export const remplacerEmballages = (ean: string, emballages: Emballage[]) =>
   appelerApi<{ nb_emballages: number }>('admin_remplacer_emballages', { ean, emballages: propres(emballages) });
 
 export const dateCourte = (iso: string | null) => (iso ? new Date(iso).toLocaleDateString('fr-BE') : '—');
+
+// -------------------------------------------------------------------------------------
+// Signalements d'erreurs depuis la fiche produit (consigne élément par élément, ou informations du produit)
+// -------------------------------------------------------------------------------------
+export type StatutSignalement = 'nouveau' | 'en_cours' | 'traite';
+export type ElementSignale = { nom: string; bac_affiche: string | null; bac_propose: string | null; ajoute: boolean };
+export type Signalement = {
+  id: number;
+  type: 'consigne' | 'produit';
+  ean: string;
+  nom_produit: string | null;
+  origine: string | null;
+  elements: ElementSignale[];
+  champs: string[];
+  correction: string | null;
+  commentaire: string | null;
+  statut: StatutSignalement;
+  cree_le: string;
+  traite_le: string | null;
+  compte: string | null;
+  dans_base: boolean;
+};
+export type ListeSignalements = { compteurs: Record<StatutSignalement, number>; signalements: Signalement[] };
+
+/** Bacs tels que l'app les affiche (catégories des cartes de tri). */
+export const BACS_APP: Record<string, { libelle: string; couleur: string }> = {
+  pmc: { libelle: 'PMC', couleur: '#3498DB' },
+  paper: { libelle: 'Papiers & cartons', couleur: '#F1C40F' },
+  glass: { libelle: 'Verre', couleur: '#95A5A6' },
+  organic: { libelle: 'Organiques', couleur: '#27AE60' },
+  residual: { libelle: 'Résiduels', couleur: '#4a4a4a' },
+  danger: { libelle: 'Recyparc', couleur: '#E74C3C' },
+};
+
+export const CHAMPS_PRODUIT: Record<string, string> = {
+  nom: 'Nom',
+  marque: 'Marque',
+  quantite: 'Quantité',
+  autre_produit: 'Ce n’est pas ce produit',
+};
+
+export const ORIGINES_CONSIGNE: Record<string, string> = {
+  verifie: 'Vérifiée par Proserpine',
+  lu: 'Lue sur l’emballage',
+  deduit: 'Déduite',
+  choisi: 'Choisie par l’utilisateur',
+};
+
+export const listerSignalements = (statut: StatutSignalement) =>
+  appelerApi<ListeSignalements>('admin_lister_signalements', { statut });
+
+export const changerStatutSignalement = (id: number, statut: StatutSignalement) =>
+  appelerApi('admin_statut_signalement', { id, statut });

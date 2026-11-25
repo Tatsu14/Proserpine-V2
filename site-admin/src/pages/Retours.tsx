@@ -27,7 +27,7 @@ import {
 const ONGLETS: { id: TypeRetour; libelle: string }[] = [
   { id: 'avis', libelle: 'Avis' },
   { id: 'problemes', libelle: 'Problèmes' },
-  { id: 'consignes', libelle: 'Consignes' },
+  { id: 'consignes', libelle: 'Consignes (ancien formulaire)' },
 ];
 
 const dateCourte = (d: Date | null) => (d ? d.toLocaleDateString('fr-BE') : '—');
@@ -67,7 +67,7 @@ function Bacs({ ids }: { ids: string[] }) {
 
 export function Retours({ onNouveaux, onOuvrirProduit }: { onNouveaux: (n: number) => void; onOuvrirProduit: (ean: string) => void }) {
   const ui = useUi();
-  const [onglet, setOnglet] = useState<TypeRetour>('consignes');
+  const [onglet, setOnglet] = useState<TypeRetour>('avis');
   const [filtre, setFiltre] = useState<'tous' | Statut>('tous');
   const [donnees, setDonnees] = useState<TousLesRetours | null>(null);
   const [chargement, setChargement] = useState(true);
@@ -144,7 +144,7 @@ export function Retours({ onNouveaux, onOuvrirProduit }: { onNouveaux: (n: numbe
       <div className="haut">
         <div>
           <h1>Retours</h1>
-          <div className="sous">Avis, problèmes signalés et consignes signalées comme fausses.</div>
+          <div className="sous">Avis et problèmes envoyés depuis l'app. Les erreurs sur une fiche produit sont dans « Signalements ».</div>
         </div>
         <div className="droite">
           <button className="btn" onClick={() => copier(true)} disabled={!donnees}>

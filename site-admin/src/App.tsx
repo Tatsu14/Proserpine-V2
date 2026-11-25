@@ -11,12 +11,13 @@ import { Connexion } from './pages/Connexion';
 import { Produits } from './pages/Produits';
 import { Propositions } from './pages/Propositions';
 import { Retours } from './pages/Retours';
+import { Signalements } from './pages/Signalements';
 import { messageErreur } from './services/api';
-import { listerPropositions } from './services/base';
+import { listerPropositions, listerSignalements } from './services/base';
 import { auth } from './services/firebase';
 
-type Page = 'propositions' | 'produits' | 'retours';
-const PAGES: Page[] = ['propositions', 'produits', 'retours'];
+type Page = 'propositions' | 'signalements' | 'produits' | 'retours';
+const PAGES: Page[] = ['propositions', 'signalements', 'produits', 'retours'];
 
 function pageDepuisAdresse(): Page {
   const p = window.location.hash.replace('#/', '') as Page;
@@ -35,14 +36,18 @@ function Espace({ user }: { user: User }) {
   const [page, setPage] = useState<Page>(pageDepuisAdresse);
   const [attente, setAttente] = useState<number | null>(null);
   const [nouveaux, setNouveaux] = useState<number | null>(null);
+  const [signales, setSignales] = useState<number | null>(null);
   const [refus, setRefus] = useState<string | null>(null);
   const [produitDemande, setProduitDemande] = useState({ terme: '', fois: 0 });
 
-  // Premier appel : vérifie que ce compte est bien administrateur, et charge le compteur.
+  // Premier appel : vérifie que ce compte est bien administrateur, et charge les compteurs du menu.
   useEffect(() => {
     listerPropositions('en_attente').then((r) => {
       if (r.ok) setAttente(r.donnees.compteurs.en_attente);
       else if (r.erreur === 'reserve_administrateur') setRefus(messageErreur(r.erreur));
+    });
+    listerSignalements('nouveau').then((r) => {
+      if (r.ok) setSignales(r.donnees.compteurs.nouveau);
     });
   }, []);
 
@@ -79,6 +84,7 @@ function Espace({ user }: { user: User }) {
 
   const entrees: { id: Page; icone: string; libelle: string; badge: number | null }[] = [
     { id: 'propositions', icone: 'inbox', libelle: 'Propositions', badge: attente },
+    { id: 'signalements', icone: 'report_problem', libelle: 'Signalements', badge: signales },
     { id: 'produits', icone: 'inventory_2', libelle: 'Produits', badge: null },
     { id: 'retours', icone: 'forum', libelle: 'Retours', badge: nouveaux },
   ];
@@ -120,6 +126,7 @@ function Espace({ user }: { user: User }) {
         </div>
       </aside>
       {page === 'propositions' ? <Propositions onCompteur={setAttente} /> : null}
+      {page === 'signalements' ? <Signalements onCompteur={setSignales} onOuvrirProduit={ouvrirProduit} /> : null}
       {page === 'produits' ? <Produits key={produitDemande.fois} termeInitial={produitDemande.terme} /> : null}
       {/* Les retours restent chargés en arrière-plan pour tenir le compteur du menu à jour. */}
       <div style={{ display: page === 'retours' ? 'contents' : 'none' }}>
