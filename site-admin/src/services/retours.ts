@@ -5,7 +5,7 @@
  */
 import { collection, doc, getDocs, limit, orderBy, query, updateDoc } from 'firebase/firestore';
 
-import { db } from './firebase';
+import { auth, db } from './firebase';
 
 export const COLLECTIONS = { avis: 'retours_avis', problemes: 'retours_signalements', consignes: 'retours_consignes' } as const;
 export type TypeRetour = keyof typeof COLLECTIONS;
@@ -107,48 +107,62 @@ async function lire(nom: string): Promise<{ id: string; d: Donnees }[]> {
 export type TousLesRetours = { avis: Avis[]; problemes: Probleme[]; consignes: Consigne[] };
 
 /** Charge les trois types de retours. Erreur = règles Firestore qui refusent ce compte, ou réseau. */
-export async function chargerRetours(): Promise<{ ok: true; donnees: TousLesRetours } | { ok: false; erreur: string }> {
+const NOMS: Record<TypeRetour, string> = { avis: 'avis', problemes: 'problèmes', consignes: 'consignes (ancien formulaire)' };
+
+/** Lit une collection ; en cas de refus, renvoie une liste vide et le code d'erreur Firestore. */
+async function lireSure(nom: string): Promise<{ lignes: { id: string; d: Donnees }[]; code: string | null }> {
   try {
-    const [a, p, c] = await Promise.all([lire(COLLECTIONS.avis), lire(COLLECTIONS.problemes), lire(COLLECTIONS.consignes)]);
-    return {
-      ok: true,
-      donnees: {
-        avis: a.map(({ id, d }) => ({
-          ...commun(id, d),
-          fonctionnalite: txt(d.fonctionnalite),
-          type: txt(d.type),
-          note: typeof d.note === 'number' ? d.note : 0,
-          commentaire: txt(d.commentaire),
-        })),
-        problemes: p.map(({ id, d }) => ({
-          ...commun(id, d),
-          fonctionnalite: txt(d.fonctionnalite),
-          gravite: txt(d.gravite),
-          action: txt(d.action),
-          description: txt(d.description),
-        })),
-        consignes: c.map(({ id, d }) => ({
-          ...commun(id, d),
-          ean: txt(d.ean),
-          nom: txt(d.nom),
-          triAffiche: liste(d.triAffiche),
-          detailAffiche: txt(d.detailAffiche),
-          origine: txt(d.origine),
-          triSuggere: liste(d.triSuggere),
-          commentaire: txt(d.commentaire),
-        })),
-      },
-    };
+    return { lignes: await lire(nom), code: null };
   } catch (e) {
-    const code = (e as { code?: string })?.code;
-    return {
-      ok: false,
-      erreur:
-        code === 'permission-denied'
-          ? 'Firestore refuse la lecture des retours à ce compte : son UID doit être ajouté aux règles Firestore.'
-          : 'Chargement des retours impossible. Vérifiez votre connexion.',
-    };
+    return { lignes: [], code: (e as { code?: string })?.code ?? 'inconnu' };
   }
+}
+
+/**
+ * Charge les trois types de retours, chacun séparément : si Firestore en refuse un (règles), les autres
+ * s'affichent quand même, et le message dit exactement lequel est refusé.
+ */
+export async function chargerRetours(): Promise<{ ok: true; donnees: TousLesRetours; erreur: string | null } | { ok: false; erreur: string }> {
+  const [a, p, c] = await Promise.all([lireSure(COLLECTIONS.avis), lireSure(COLLECTIONS.problemes), lireSure(COLLECTIONS.consignes)]);
+  const refus = (['avis', 'problemes', 'consignes'] as TypeRetour[]).filter((_t, k) => [a, p, c][k].code !== null);
+  if (refus.length === 3 && [a, p, c].every((x) => x.code !== 'permission-denied')) {
+    return { ok: false, erreur: 'Chargement des retours impossible. Vérifiez votre connexion.' };
+  }
+  const erreur = refus.length
+    ? `Firestore refuse la lecture de : ${refus
+        .map((t) => `${NOMS[t]} (collection « ${COLLECTIONS[t]} », ${[a, p, c][(['avis', 'problemes', 'consignes'] as TypeRetour[]).indexOf(t)].code})`)
+        .join(' ; ')}. Vérifiez la règle de cette collection dans Firestore (Règles) : elle doit utiliser estAdmin(), qui doit contenir l'UID de ce compte (${auth.currentUser?.uid ?? '?'}).`
+    : null;
+  return {
+    ok: true,
+    erreur,
+    donnees: {
+      avis: a.lignes.map(({ id, d }) => ({
+        ...commun(id, d),
+        fonctionnalite: txt(d.fonctionnalite),
+        type: txt(d.type),
+        note: typeof d.note === 'number' ? d.note : 0,
+        commentaire: txt(d.commentaire),
+      })),
+      problemes: p.lignes.map(({ id, d }) => ({
+        ...commun(id, d),
+        fonctionnalite: txt(d.fonctionnalite),
+        gravite: txt(d.gravite),
+        action: txt(d.action),
+        description: txt(d.description),
+      })),
+      consignes: c.lignes.map(({ id, d }) => ({
+        ...commun(id, d),
+        ean: txt(d.ean),
+        nom: txt(d.nom),
+        triAffiche: liste(d.triAffiche),
+        detailAffiche: txt(d.detailAffiche),
+        origine: txt(d.origine),
+        triSuggere: liste(d.triSuggere),
+        commentaire: txt(d.commentaire),
+      })),
+    },
+  };
 }
 
 /** Les règles n'autorisent à modifier que le statut. */

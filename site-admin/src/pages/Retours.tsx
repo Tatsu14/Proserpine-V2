@@ -77,8 +77,10 @@ export function Retours({ onNouveaux, onOuvrirProduit }: { onNouveaux: (n: numbe
     setChargement(true);
     setErreur(null);
     const r = await chargerRetours();
-    if (r.ok) setDonnees(r.donnees);
-    else setErreur(r.erreur);
+    if (r.ok) {
+      setDonnees(r.donnees);
+      setErreur(r.erreur);
+    } else setErreur(r.erreur);
     setChargement(false);
   }, []);
 
