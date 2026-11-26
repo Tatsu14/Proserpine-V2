@@ -123,7 +123,10 @@ async function lireSure(nom: string): Promise<{ lignes: { id: string; d: Donnees
  * s'affichent quand même, et le message dit exactement lequel est refusé.
  */
 export async function chargerRetours(): Promise<{ ok: true; donnees: TousLesRetours; erreur: string | null } | { ok: false; erreur: string }> {
-  const [a, p, c] = await Promise.all([lireSure(COLLECTIONS.avis), lireSure(COLLECTIONS.problemes), lireSure(COLLECTIONS.consignes)]);
+  // Les consignes signalées passent depuis la mise à jour 2 par la base Proserpine (section « Signalements ») :
+  // l'ancienne collection Firestore n'est plus lue (sa règle n'a jamais été publiée, elle est restée vide).
+  const sansConsignes = { lignes: [] as { id: string; d: Donnees }[], code: null };
+  const [a, p, c] = await Promise.all([lireSure(COLLECTIONS.avis), lireSure(COLLECTIONS.problemes), Promise.resolve(sansConsignes)]);
   const refus = (['avis', 'problemes', 'consignes'] as TypeRetour[]).filter((_t, k) => [a, p, c][k].code !== null);
   if (refus.length === 3 && [a, p, c].every((x) => x.code !== 'permission-denied')) {
     return { ok: false, erreur: 'Chargement des retours impossible. Vérifiez votre connexion.' };
@@ -201,8 +204,7 @@ export function construireRapport(r: TousLesRetours, maintenant = new Date()): s
     'Analyse ces retours puis :',
     '1. dégage les thèmes récurrents ;',
     '2. liste les problèmes bloquants ou gênants à corriger en priorité ;',
-    '3. propose des améliorations, classées par impact et par effort estimé, en citant les retours qui les justifient ;',
-    '4. pour les consignes signalées, dis lesquelles semblent réellement fausses.',
+    '3. propose des améliorations, classées par impact et par effort estimé, en citant les retours qui les justifient.',
     '',
   );
   l.push(`## Avis (${r.avis.length})`);
@@ -218,7 +220,7 @@ export function construireRapport(r: TousLesRetours, maintenant = new Date()): s
       `- ${jour(p.creeLe)} | ${libelle(FONCTIONNALITES, p.fonctionnalite)} | ${libelle(GRAVITES, p.gravite)} | ${appareil(p)} | ${p.statut} | ${p.action ? citer(p.action) : '(non précisé)'} | ${citer(p.description)}`,
     );
   }
-  l.push('', `## Consignes signalées comme fausses (${r.consignes.length})`);
+  if (r.consignes.length) l.push('', `## Consignes signalées comme fausses (${r.consignes.length})`);
   for (const c of r.consignes) {
     l.push(
       `- ${jour(c.creeLe)} | ${c.ean} ${citer(c.nom)} | affiché : ${bacs(c.triAffiche)}${c.detailAffiche ? ` (${citer(c.detailAffiche)})` : ''} | origine : ${ORIGINES_CONSIGNE[c.origine] ?? c.origine} | suggéré : ${bacs(c.triSuggere)} | ${c.statut} | ${c.commentaire ? citer(c.commentaire) : '(sans commentaire)'}`,

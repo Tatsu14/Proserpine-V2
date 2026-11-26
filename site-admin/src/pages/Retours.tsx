@@ -27,7 +27,6 @@ import {
 const ONGLETS: { id: TypeRetour; libelle: string }[] = [
   { id: 'avis', libelle: 'Avis' },
   { id: 'problemes', libelle: 'Problèmes' },
-  { id: 'consignes', libelle: 'Consignes (ancien formulaire)' },
 ];
 
 const dateCourte = (d: Date | null) => (d ? d.toLocaleDateString('fr-BE') : '—');
